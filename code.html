@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Novasphere Sol | Architectural Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Noto+Serif:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#472051",
+                        "on-surface": "#e5e2e1",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed": "#1b1c19",
+                        "surface-container-lowest": "#0e0e0e",
+                        "background": "#131313",
+                        "inverse-surface": "#e5e2e1",
+                        "outline": "#998d97",
+                        "on-background": "#e5e2e1",
+                        "tertiary-container": "#222222",
+                        "primary-fixed": "#fbd7ff",
+                        "on-primary-fixed": "#30093b",
+                        "surface-variant": "#353534",
+                        "on-secondary-fixed-variant": "#474743",
+                        "on-primary-container": "#a779b1",
+                        "secondary": "#c8c6c1",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "error-container": "#93000a",
+                        "tertiary": "#c8c6c5",
+                        "inverse-on-surface": "#313030",
+                        "on-secondary-container": "#b6b5b0",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "on-error-container": "#ffdad6",
+                        "inverse-primary": "#794f83",
+                        "secondary-container": "#474743",
+                        "on-error": "#690005",
+                        "on-tertiary": "#313030",
+                        "on-secondary": "#30312d",
+                        "surface-dim": "#131313",
+                        "secondary-fixed": "#e4e2dd",
+                        "primary": "#e8b5f1",
+                        "on-surface-variant": "#d0c3ce",
+                        "primary-fixed-dim": "#e8b5f1",
+                        "outline-variant": "#4d444d",
+                        "primary-container": "#371142",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "surface-bright": "#3a3939",
+                        "on-primary-fixed-variant": "#5f376a",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-tint": "#e8b5f1",
+                        "surface-container": "#201f1f",
+                        "on-tertiary-container": "#8a8989",
+                        "surface": "#131313",
+                        "secondary-fixed-dim": "#c8c6c1",
+                        "surface-container-highest": "#353534"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "container-max": "1440px",
+                        "unit": "8px",
+                        "margin-page": "64px",
+                        "section-gap": "128px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Noto Serif"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Noto Serif"],
+                        "display-xl": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "300" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "400" }],
+                        "display-xl": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(55, 17, 66, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(200, 198, 193, 0.1);
+        }
+        .bg-radial-plum {
+            background: radial-gradient(circle at 50% 50%, rgba(55, 17, 66, 0.2) 0%, transparent 60%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-x-hidden selection:bg-primary-container selection:text-primary">
+<!-- TopNavBar -->
+<nav class="bg-black/40 backdrop-blur-2xl fixed top-0 w-full z-50 border-b border-white/10 ease-in-out duration-300">
+<div class="flex justify-between items-center px-16 py-8 w-full max-w-screen-2xl mx-auto">
+<div class="text-2xl font-serif tracking-tighter text-white">Novasphere Sol</div>
+<div class="hidden md:flex items-center space-x-gutter">
+<a class="font-serif tracking-tight text-sm uppercase text-white border-b border-zinc-400 pb-1 hover:text-zinc-100 transition-colors duration-500" href="#">Product</a>
+<a class="font-serif tracking-tight text-sm uppercase text-zinc-500 hover:text-zinc-100 transition-colors duration-500" href="#">How It Works</a>
+<a class="font-serif tracking-tight text-sm uppercase text-zinc-500 hover:text-zinc-100 transition-colors duration-500" href="#">Case Studies</a>
+<a class="font-serif tracking-tight text-sm uppercase text-zinc-500 hover:text-zinc-100 transition-colors duration-500" href="#">Team</a>
+</div>
+<div class="flex items-center space-x-unit">
+<button class="hidden md:block font-label-caps text-label-caps text-zinc-300 hover:text-white transition-colors px-4 py-2 border border-transparent">Watch Video</button>
+<button class="bg-secondary text-background font-label-caps text-label-caps px-6 py-3 tracking-[0.2em] hover:bg-white transition-colors duration-300">Book a Demo</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center pt-32 pb-section-gap px-margin-page bg-radial-plum">
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+<img alt="Hero Background" class="w-full h-full object-cover" data-alt="A sophisticated architectural interior space featuring dark, polished surfaces and sharp geometric lines. Subtle volumetric lighting creates a sense of depth and mystery. The palette is dominated by deep blacks, charcoal greys, and faint hints of metallic champagne reflecting off glass partitions. The mood is authoritative, minimalist, and highly professional, reflecting a high-end corporate sanctuary." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjOtxx28oSjzWI9OpQoZcd2ZKkU-xWvxSXp8nHrsKyo2OuhWFs7N5Wkfdw0laFCdIgzOzFdCB2bE-MB99VHc8Aj8eKwNkMwYtPTNgfwwYcs8l-hC4iTuUz18jIxvjr-VNVBaNmQVXQnoV64pCeOWm0v-qhJ8nMzO1VR9gyoisAyXHNPvDSw7403lOQSkBxgAXLL3AVpJLwxqSDuEyiQ-gXYDd5C9EL3zPvKVV8PWYAjbtGbNaVkfvQ2hFPUen3uPrd-eUBUh4J3Aq6"/>
+</div>
+<div class="relative z-10 max-w-container-max mx-auto text-center">
+<h1 class="font-display-xl text-display-xl max-w-4xl mx-auto mb-gutter text-on-surface">Stop Wasting Billable Hours on Unqualified Leads</h1>
+<p class="font-body-lg text-body-lg max-w-2xl mx-auto mb-16 text-on-surface-variant">Our AI screens, qualifies, and prioritizes every inquiry so your team only speaks to clients that actually convert.</p>
+<div class="flex flex-col items-center gap-12 mb-16 w-full">
+<div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+<button class="bg-secondary text-background font-label-caps text-label-caps px-8 py-4 tracking-[0.2em] hover:bg-white transition-all w-full sm:w-auto">Book a Demo</button>
+<button class="glass-panel text-on-surface font-label-caps text-label-caps px-8 py-4 tracking-[0.2em] hover:bg-white/5 transition-all w-full sm:w-auto flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">play_circle</span>
+            Watch How It Works
+        </button>
+</div>
+<div class="w-full max-w-4xl aspect-video glass-panel relative group overflow-hidden cursor-pointer">
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-50"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-4xl text-white">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-8 left-8 text-left">
+<p class="font-label-caps text-[10px] tracking-[0.3em] uppercase text-outline mb-2">Preview</p>
+<p class="font-serif italic text-white/60">Short Cinematic Explainer</p>
+</div>
+</div>
+</div>
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-widest">Used by modern law firms to reduce intake time and increase conversions</p>
+</div>
+</section>
+<!-- Problem Section -->
+<section class="py-section-gap px-margin-page bg-surface-container-lowest">
+<div class="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<div class="lg:col-span-5 lg:pr-16">
+<h2 class="font-headline-lg text-headline-lg mb-8">Your Intake Process Is Costing You More Than You Think</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">High-value leads lose interest, response times slow down, revenue quietly slips away.</p>
+</div>
+<div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 lg:mt-0">
+<div class="glass-panel p-8 flex flex-col gap-4">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="folder_off">folder_off</span>
+<h3 class="font-headline-md text-headline-md text-xl">Wrong case types</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Hours spent evaluating matters outside your firm's core expertise.</p>
+</div>
+<div class="glass-panel p-8 flex flex-col gap-4">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="person_cancel">person_cancel</span>
+<h3 class="font-headline-md text-headline-md text-xl">Low-value clients</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Resources drained by inquiries that ultimately don't align with your financial thresholds.</p>
+</div>
+<div class="glass-panel p-8 flex flex-col gap-4">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="data_alert">data_alert</span>
+<h3 class="font-headline-md text-headline-md text-xl">Incomplete information</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Endless back-and-forth attempting to gather basic facts before a consultation.</p>
+</div>
+</div>
+</div>
+</section><section class="py-section-gap px-margin-page bg-background border-t border-white/5">
+<div class="max-w-container-max mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
+<div class="lg:col-span-7">
+<div class="aspect-video glass-panel relative group overflow-hidden border-white/5">
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-700"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center backdrop-blur-xl group-hover:bg-white group-hover:text-black transition-all duration-500">
+<span class="material-symbols-outlined">play_arrow</span>
+</div>
+</div>
+<div class="absolute top-6 left-6">
+<span class="font-label-caps text-[10px] tracking-[0.2em] text-white/40 uppercase">Product Walkthrough</span>
+</div>
+</div>
+</div>
+<div class="lg:col-span-5 lg:pl-16">
+<span class="font-label-caps text-label-caps text-primary tracking-[0.3em] uppercase block mb-6">The Solution</span>
+<h2 class="font-headline-lg text-headline-lg mb-8">Intelligent Architecture for Your Intake</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8">Our platform doesn't just filter leads; it constructs a seamless bridge between inquiry and engagement, ensuring your experts focus only on high-value opportunities.</p>
+<ul class="space-y-4">
+<li class="flex items-center gap-4 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                        Real-time AI vetting and scoring
+                    </li>
+<li class="flex items-center gap-4 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                        Automated data collection pipelines
+                    </li>
+<li class="flex items-center gap-4 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                        Seamless CRM integration
+                    </li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#0F0F0F] w-full border-t border-zinc-900 transition-opacity duration-300">
+<div class="flex flex-col md:flex-row justify-between items-center px-16 py-20 w-full max-w-screen-2xl mx-auto">
+<div class="mb-8 md:mb-0 text-center md:text-left">
+<div class="text-lg font-serif text-white uppercase tracking-[0.2em] mb-4">Novasphere Sol</div>
+<p class="font-serif text-xs tracking-widest text-zinc-400 max-w-md">AI-powered lead qualification built for modern law firms. © 2024 Novasphere Sol. Architectural intelligence for the legal elite.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-serif text-xs tracking-widest text-zinc-600 hover:text-zinc-200 transition-colors uppercase" href="#">Product</a>
+<a class="font-serif text-xs tracking-widest text-zinc-600 hover:text-zinc-200 transition-colors uppercase" href="#">How It Works</a>
+<a class="font-serif text-xs tracking-widest text-zinc-600 hover:text-zinc-200 transition-colors uppercase" href="#">Privacy Policy</a>
+<a class="font-serif text-xs tracking-widest text-zinc-600 hover:text-zinc-200 transition-colors uppercase" href="#">Contact</a>
+<a class="font-serif text-xs tracking-widest text-zinc-600 hover:text-zinc-200 transition-colors uppercase" href="#">LinkedIn</a>
+</div>
+</div>
+</footer>
+</body></html>
