@@ -44,7 +44,10 @@ export default function Home() {
         
         <div className="relative z-10 max-w-5xl mx-auto text-center">
           <h1 className="text-6xl md:text-7xl font-serif tracking-tighter text-on-surface mb-8 leading-tight animate-hero-reveal">
-            A Bold Headline for a Premium Platform
+            A Bold Headline for a Premium{' '}
+            <span className="bg-gradient-to-r from-primary via-[#5a1b6f] to-[#c8a0d6] bg-clip-text text-transparent font-semibold italic">
+              Platform
+            </span>
           </h1>
           
           <p className="text-xl text-on-surface-variant mb-12 max-w-3xl mx-auto leading-relaxed tracking-wide font-light">
@@ -56,7 +59,7 @@ export default function Home() {
             <button className="bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-white transition-all duration-300 w-full sm:w-auto">
               Primary Action
             </button>
-            <button className="bg-surface-container-high/40 text-on-surface text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 border border-outline-variant/40 hover:bg-surface-container-high/60 transition-all duration-300 backdrop-blur-xl w-full sm:w-auto flex items-center justify-center gap-2">
+            <button className="bg-primary text-on-primary text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 border border-white/10 hover:bg-primary/90 transition-all duration-300 w-full sm:w-auto flex items-center justify-center gap-2">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
               </svg>
@@ -122,11 +125,11 @@ export default function Home() {
               ].map((item, idx) => (
                 <div
                   key={idx}
-                  className="glass-panel p-8 flex flex-col gap-4 hover:bg-surface-container-low/60 transition-colors duration-300 premium-card"
+                  className="bg-gradient-to-br from-primary to-[#2a0d33] text-on-primary border border-white/10 rounded-lg p-5 md:p-6 flex flex-col gap-2 min-h-[200px] max-h-[230px] overflow-hidden shadow-[0_18px_40px_rgba(55,17,66,0.35)] transition-colors duration-300 premium-card"
                 >
-                  <span className="material-symbols-outlined text-outline text-3xl">{item.icon}</span>
-                  <h3 className="text-xl font-serif text-on-surface mb-2">{item.title}</h3>
-                  <p className="text-sm text-on-surface-variant leading-relaxed">{item.desc}</p>
+                  <span className="material-symbols-outlined text-white/85 text-2xl">{item.icon}</span>
+                  <h3 className="text-lg font-serif text-white">{item.title}</h3>
+                  <p className="text-xs text-white/80 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -136,7 +139,7 @@ export default function Home() {
           <div className="py-16 border-t border-outline-variant/20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12">
               <div className="lg:col-span-5">
-                <h3 className="text-xs font-sans font-semibold uppercase tracking-widest text-primary mb-6">Built By Specialists</h3>
+                <h3 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Built By Specialists</h3>
                 <h2 className="text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-8">
                   Built by a Team That Values Precision
                 </h2>
@@ -145,20 +148,27 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[
-                  { title: 'Strategy / Research', desc: 'Placeholder line describing thoughtful direction' },
-                  { title: 'Design / Systems', desc: 'Placeholder line describing structured craft' },
-                  { title: 'Delivery / Support', desc: 'Placeholder line describing steady execution' },
-                ].map((dept, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-surface-container-low/40 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-6 hover:bg-surface-container-low/60 transition-colors duration-300 premium-card"
-                  >
-                    <h4 className="text-sm font-serif text-on-surface mb-3">{dept.title}</h4>
-                    <p className="text-xs text-on-surface-variant leading-relaxed">{dept.desc}</p>
-                  </div>
-                ))}
+              <div className="lg:col-span-7">
+                <div className="bg-surface-container-low/40 border border-outline-variant/30 backdrop-blur-xl rounded-xl p-6 md:p-8 premium-card">
+                  {[
+                    { title: 'Strategy / Research', desc: 'Placeholder line describing thoughtful direction' },
+                    { title: 'Design / Systems', desc: 'Placeholder line describing structured craft' },
+                    { title: 'Delivery / Support', desc: 'Placeholder line describing steady execution' },
+                  ].map((dept, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-4 border-t border-outline-variant/20 pt-6 first:border-t-0 first:pt-0"
+                    >
+                      <div className="h-10 w-10 rounded-lg bg-primary/20 border border-white/10 flex items-center justify-center">
+                        <span className="text-[#c8a0d6] text-xs font-sans font-semibold">0{idx + 1}</span>
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-serif text-on-surface mb-2">{dept.title}</h4>
+                        <p className="text-xs text-on-surface-variant leading-relaxed">{dept.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -221,7 +231,7 @@ export default function Home() {
             </div>
 
             <div className="lg:col-span-6 lg:pl-12">
-              <p className="text-xs font-sans font-semibold uppercase tracking-widest text-primary mb-6">The Framework</p>
+              <p className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">The Framework</p>
               <h2 className="text-5xl md:text-6xl font-serif tracking-tighter text-on-surface mb-8 leading-tight">
                 A Structured System for Confident Decisions
               </h2>
@@ -238,7 +248,7 @@ export default function Home() {
                   { icon: 'check_circle', text: 'Live status updates' },
                 ].map((benefit, idx) => (
                   <div key={idx} className="flex items-center gap-4">
-                    <span className="material-symbols-outlined text-primary text-xl">{benefit.icon}</span>
+                    <span className="material-symbols-outlined text-[#c8a0d6] text-xl">{benefit.icon}</span>
                     <p className="text-base text-on-surface font-light">{benefit.text}</p>
                   </div>
                 ))}
@@ -306,7 +316,7 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="text-xs font-sans font-semibold uppercase tracking-widest text-primary mb-6">Explore</h4>
+              <h4 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Explore</h4>
               <ul className="space-y-3">
                 {['Overview', 'Process', 'Details', 'Updates'].map((link) => (
                   <li key={link}>
@@ -319,7 +329,7 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="text-xs font-sans font-semibold uppercase tracking-widest text-primary mb-6">Resources</h4>
+              <h4 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Resources</h4>
               <ul className="space-y-3">
                 {['Documentation', 'Guides', 'Contact', 'LinkedIn'].map((link) => (
                   <li key={link}>
