@@ -10,20 +10,57 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false)
   const [openFaq, setOpenFaq] = useState<number | null>(0)
   const statsDone = useRef(false)
+  const statsHasScrolled = useRef(false)
+  const statsIsVisible = useRef(false)
   const [statDisplay, setStatDisplay] = useState({ pct: 0, mult: 0 })
+
+  const [demoForm, setDemoForm] = useState({ name: '', email: '', firm: '' })
+  const [demoSubmitted, setDemoSubmitted] = useState(false)
 
   const scrollToContact = useCallback(() => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
+  const scrollToSolution = useCallback(() => {
+    document.getElementById('solution')?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
+
+  const startStatsAnimation = useCallback(() => {
+    if (statsDone.current) return
+    statsDone.current = true
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setStatDisplay({ pct: 73, mult: 3 })
+      return
+    }
+
+    const duration = 1400
+    const start = performance.now()
+    const from = { pct: 0, mult: 0 }
+    const to = { pct: 73, mult: 3 }
+
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration)
+      const e = easeOutCubic(t)
+      setStatDisplay({
+        pct: Math.round(from.pct + (to.pct - from.pct) * e),
+        mult: Math.round((from.mult + (to.mult - from.mult) * e) * 10) / 10,
+      })
+      if (t < 1) requestAnimationFrame(tick)
+    }
+
+    requestAnimationFrame(tick)
+  }, [])
+
   useEffect(() => {
     const onScroll = () => {
+      if (!statsHasScrolled.current) statsHasScrolled.current = true
       setScrolled(window.scrollY > 50)
     }
-    onScroll()
+    setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [startStatsAnimation])
 
   useEffect(() => {
     const nodes = document.querySelectorAll<HTMLElement>('[data-lp-reveal]')
@@ -47,33 +84,19 @@ export default function Home() {
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting || statsDone.current) return
-          statsDone.current = true
-          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            setStatDisplay({ pct: 73, mult: 3 })
-            return
-          }
-          const duration = 1200
-          const start = performance.now()
-          const from = { pct: 0, mult: 0 }
-          const to = { pct: 73, mult: 3 }
-          const tick = (now: number) => {
-            const t = Math.min(1, (now - start) / duration)
-            const e = easeOutCubic(t)
-            setStatDisplay({
-              pct: Math.round(from.pct + (to.pct - from.pct) * e),
-              mult: Math.round((from.mult + (to.mult - from.mult) * e) * 10) / 10,
-            })
-            if (t < 1) requestAnimationFrame(tick)
-          }
-          requestAnimationFrame(tick)
+          statsIsVisible.current = entry.isIntersecting
+          if (!entry.isIntersecting) return
+          if (statsDone.current) return
+          if (!statsHasScrolled.current) return
+
+          startStatsAnimation()
         })
       },
-      { threshold: 0.25 }
+      { threshold: 0.05, rootMargin: '0px 0px -10% 0px' }
     )
     io.observe(el)
     return () => io.disconnect()
-  }, [])
+  }, [startStatsAnimation])
 
   const faqItems = [
     {
@@ -108,6 +131,12 @@ export default function Home() {
 [data-lp-reveal].lp-reveal-visible { opacity: 1; transform: translateY(0); }
 .lp-sticky-demo-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 999; transform: translateY(100%); animation: lpStickyBarUp 0.5s ease 1.5s forwards; background: rgba(14, 14, 14, 0.92); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-top: 1px solid rgba(55, 17, 66, 0.2); box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.45); }
 @keyframes lpStickyBarUp { to { transform: translateY(0); } }
+
+@keyframes lpBottomPulse {
+  0%, 86%, 100% { transform: translateZ(0) scale(1); box-shadow: none; }
+  92% { transform: translateZ(0) scale(1.03); box-shadow: 0 0 18px rgba(55, 17, 66, 0.45); }
+}
+.lp-bottom-bar-attention { animation: lpBottomPulse 4s ease-in-out infinite; }
 .lp-faq-panel { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
 .lp-faq-panel.lp-faq-open { max-height: 500px; }
 .lp-faq-chevron { transition: transform 0.35s ease; }
@@ -118,6 +147,7 @@ export default function Home() {
 @media (prefers-reduced-motion: reduce) {
   .lp-hero-line1, .lp-hero-line2, .lp-hero-line3 { animation: none; opacity: 1; transform: none; }
   .lp-sticky-demo-bar { animation: none; transform: translateY(0); }
+  .lp-bottom-bar-attention { animation: none; }
   [data-lp-reveal] { opacity: 1; transform: none; transition: none; }
   .lp-pill-cta { transition: none; }
   .lp-pill-cta:hover { transform: none; box-shadow: none; }
@@ -166,9 +196,12 @@ export default function Home() {
             , it doesn&apos;t have to.
           </h1>
 
-          <p className="text-xl text-on-surface-variant mb-12 max-w-3xl mx-auto leading-relaxed tracking-wide font-light lp-hero-line2">
-            NovaSphere is the conversational first line: it sorts the tire-kickers, captures what matters for liability or relief, and hands your lawyers a clean brief—so you spend consults on clients you can actually help.
-          </p>
+          <div className="mb-12 max-w-3xl mx-auto leading-relaxed tracking-wide font-light lp-hero-line2">
+            <p className="text-xl text-[#c8a0d6] mb-3">PI &amp; immigration intake, handled.</p>
+            <p className="text-xl text-on-surface-variant">
+              NovaSphere sorts the noise, captures what matters, and hands your lawyers a clean brief.
+            </p>
+          </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16 lp-hero-line3">
             <button
@@ -187,6 +220,16 @@ export default function Home() {
               </svg>
               Watch how it works
             </button>
+          </div>
+
+          <div
+            className="max-w-3xl mx-auto border-t border-outline-variant/20 border-b border-outline-variant/20 py-3 opacity-60"
+            data-lp-reveal
+            style={{ ['--lp-del' as string]: '240ms' }}
+          >
+            <p className="text-[13px] text-on-surface-variant text-center">
+              Trusted by 200+ PI and immigration firms across North America
+            </p>
           </div>
 
           <div
@@ -224,7 +267,13 @@ export default function Home() {
                 </div>
               </div>
               <div className="absolute bottom-6 left-6">
-                <p className="text-xs font-sans font-semibold uppercase tracking-widest text-outline mb-2">See the workflow</p>
+                <button
+                  type="button"
+                  onClick={scrollToSolution}
+                  className="text-xs font-sans font-semibold uppercase tracking-widest text-outline mb-2 cursor-pointer"
+                >
+                  See the workflow
+                </button>
                 <p className="text-sm font-serif italic text-on-surface-variant">From web form to qualified brief</p>
               </div>
             </div>
@@ -281,7 +330,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="py-16 border-t border-outline-variant/20">
+          <div className="pt-32 pb-16 border-t border-outline-variant/20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12">
               <div className="lg:col-span-5" data-lp-reveal style={{ ['--lp-del' as string]: '0ms' }}>
                 <h3 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Why we built this</h3>
@@ -322,7 +371,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="py-16 border-t border-outline-variant/20">
+          <div className="pt-32 pb-16 border-t border-outline-variant/20">
             <h2
               className="text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-12 text-center"
               data-lp-reveal
@@ -335,7 +384,7 @@ export default function Home() {
               {[
                 {
                   text: 'We cut morning triage from hours to minutes. Our coordinators finally sound like closers on the phone—not filters.',
-                  author: 'Managing partner, litigation boutique',
+                  author: 'Managing Partner, litigation boutique',
                 },
                 {
                   text: 'Consults feel different when the AI already asked the “hard” PI questions. We walk in with a theory of the case.',
@@ -352,10 +401,43 @@ export default function Home() {
                   style={{ ['--lp-del' as string]: `${idx * 100}ms` }}
                   className="lp-testimonial-card bg-surface-container-high/30 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-8 cursor-pointer"
                 >
-                  <p className="text-base text-on-surface leading-relaxed mb-6 italic">
-                    &quot;{testimonial.text}&quot;
-                  </p>
-                  <p className="text-sm text-on-surface-variant font-sans">{testimonial.author}</p>
+                  {(() => {
+                    const [descriptorRaw, ...rest] = testimonial.author.split(',')
+                    const descriptor = (descriptorRaw ?? '').trim()
+                    const firmType = rest.join(',').trim()
+
+                    const descriptorWords = descriptor.split(/\s+/).filter(Boolean)
+                    const initialsFromDescriptor = descriptorWords.slice(0, 2).map((w) => w[0]?.toUpperCase() ?? '').join('')
+                    const firmWords = firmType.split(/\s+/).filter(Boolean)
+                    const initials = (initialsFromDescriptor + (firmWords[0]?.[0] ?? '')).toUpperCase().slice(0, 2)
+
+                    return (
+                      <>
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="h-10 w-10 rounded-full flex items-center justify-center bg-primary/20 border border-[#c8a0d6]/25 text-[#c8a0d6] font-sans font-semibold">
+                            {initials}
+                          </div>
+                          <p className="text-sm text-on-surface-variant font-sans leading-tight">
+                            <span className="font-semibold text-on-surface">{descriptor}</span>
+                            {firmType ? (
+                              <>
+                                {', '}
+                                {firmType}
+                              </>
+                            ) : null}
+                          </p>
+                        </div>
+
+                        <p className="text-[#c8a0d6] text-sm tracking-widest mb-4" aria-hidden>
+                          ★★★★★
+                        </p>
+
+                        <p className="text-base text-on-surface leading-relaxed mb-6 italic">
+                          &quot;{testimonial.text}&quot;
+                        </p>
+                      </>
+                    )
+                  })()}
                 </div>
               ))}
             </div>
@@ -419,7 +501,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div id="faq" className="max-w-3xl mx-auto border-t border-outline-variant/20 pt-24">
+          <div id="faq" className="max-w-3xl mx-auto border-t border-outline-variant/20 pt-32">
             <h2
               className="text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-4 text-center"
               data-lp-reveal
@@ -502,11 +584,68 @@ export default function Home() {
             data-lp-reveal
             style={{ ['--lp-del' as string]: '0ms' }}
           >
-            <div className="bg-surface-container-high/40 rounded border border-outline-variant/40 py-12 text-center">
-              <p className="text-on-surface-variant font-light mb-2">Scheduling widget embedded here</p>
-              <p className="text-xs font-sans uppercase tracking-widest text-outline-variant">
-                Replace with your preferred scheduling embed
-              </p>
+            <div className="bg-surface-container-high/40 rounded border border-outline-variant/40 py-10 text-center">
+              {!demoSubmitted ? (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    setDemoSubmitted(true)
+                  }}
+                  className="max-w-xl mx-auto px-2"
+                >
+                  <div className="space-y-4 text-left">
+                    <div>
+                      <label className="text-xs font-sans font-semibold uppercase tracking-widest text-on-surface-variant">
+                        Name
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        value={demoForm.name}
+                        onChange={(e) => setDemoForm((s) => ({ ...s, name: e.target.value }))}
+                        className="mt-2 w-full bg-background/40 border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface outline-none focus:border-[#c8a0d6]/40"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-sans font-semibold uppercase tracking-widest text-on-surface-variant">
+                        Email
+                      </label>
+                      <input
+                        required
+                        type="email"
+                        value={demoForm.email}
+                        onChange={(e) => setDemoForm((s) => ({ ...s, email: e.target.value }))}
+                        className="mt-2 w-full bg-background/40 border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface outline-none focus:border-[#c8a0d6]/40"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-sans font-semibold uppercase tracking-widest text-on-surface-variant">
+                        Firm name
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        value={demoForm.firm}
+                        onChange={(e) => setDemoForm((s) => ({ ...s, firm: e.target.value }))}
+                        className="mt-2 w-full bg-background/40 border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface outline-none focus:border-[#c8a0d6]/40"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="lp-pill-cta bg-primary text-on-primary text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-primary/90 transition-all duration-300 w-full sm:w-auto"
+                    >
+                      Book My Demo →
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="space-y-2">
+                  <p className="text-on-surface-variant font-light">We'll be in touch within one business day.</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -580,14 +719,14 @@ export default function Home() {
       <div className="lp-sticky-demo-bar" role="region" aria-label="Book a demo">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-on-surface-variant font-light text-center sm:text-left">
-            <span className="text-on-surface font-serif">Still scrolling?</span> If intake is eating your week, let&apos;s fix that in one call.
+            Every unqualified lead costs your firm time and money. Fix intake this week.
           </p>
           <button
             type="button"
             onClick={scrollToContact}
-            className="lp-pill-cta bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-8 py-3.5 hover:bg-white shrink-0 w-full sm:w-auto"
+            className="lp-pill-cta bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-8 py-3.5 hover:bg-white shrink-0 w-full sm:w-auto lp-bottom-bar-attention"
           >
-            Book a demo
+            Book a Free Demo →
           </button>
         </div>
       </div>

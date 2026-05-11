@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --font-inter: var(--font-inter);
   --font-noto-serif: var(--font-noto-serif);
