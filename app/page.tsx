@@ -1,75 +1,221 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+function easeOutCubic(t: number) {
+  return 1 - Math.pow(1 - t, 3)
+}
 
 export default function Home() {
-  const [hoveredTestimonial, setHoveredTestimonial] = useState<number | null>(null)
+  const [scrolled, setScrolled] = useState(false)
+  const [openFaq, setOpenFaq] = useState<number | null>(0)
+  const statsDone = useRef(false)
+  const [statDisplay, setStatDisplay] = useState({ pct: 0, mult: 0 })
+
+  const scrollToContact = useCallback(() => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    const nodes = document.querySelectorAll<HTMLElement>('[data-lp-reveal]')
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('lp-reveal-visible')
+          }
+        })
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+    )
+    nodes.forEach((n) => io.observe(n))
+    return () => io.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const el = document.getElementById('lp-stats')
+    if (!el) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || statsDone.current) return
+          statsDone.current = true
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            setStatDisplay({ pct: 73, mult: 3 })
+            return
+          }
+          const duration = 1200
+          const start = performance.now()
+          const from = { pct: 0, mult: 0 }
+          const to = { pct: 73, mult: 3 }
+          const tick = (now: number) => {
+            const t = Math.min(1, (now - start) / duration)
+            const e = easeOutCubic(t)
+            setStatDisplay({
+              pct: Math.round(from.pct + (to.pct - from.pct) * e),
+              mult: Math.round((from.mult + (to.mult - from.mult) * e) * 10) / 10,
+            })
+            if (t < 1) requestAnimationFrame(tick)
+          }
+          requestAnimationFrame(tick)
+        })
+      },
+      { threshold: 0.25 }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  const faqItems = [
+    {
+      q: 'How does the AI qualify personal injury and immigration leads?',
+      a: 'It reads each inquiry like an intake coordinator would: practice fit, urgency, jurisdiction, and completeness. High-signal PI matters (clear liability windows, treatment timeline, damages story) and immigration paths with realistic timelines surface first—so your team replies in the right order.',
+    },
+    {
+      q: 'Will this fit how our firm already handles intake?',
+      a: 'Yes. Think of it as a first pass that tags, summarizes, and routes—your policies stay yours. Firms keep their existing channels; we reduce the noise before a human ever picks up the phone.',
+    },
+    {
+      q: 'How fast can we go live?',
+      a: 'Most teams start with a focused pilot: connect your inbound flow, tune a few screening rules, and train the handoff. Book a short demo and we will map your intake steps to a realistic timeline.',
+    },
+  ]
 
   return (
-    <main className="w-full overflow-x-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-background/40 backdrop-blur-2xl border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-8 py-6 flex justify-between items-center">
-          <div className="text-xl font-serif tracking-tighter text-on-surface">Lumina Axis</div>
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#product" className="text-sm font-serif uppercase tracking-wider text-on-surface-variant hover:text-on-surface transition-colors">
-              Overview
-            </a>
-            <a href="#solution" className="text-sm font-serif uppercase tracking-wider text-on-surface-variant hover:text-on-surface transition-colors">
-              Process
-            </a>
-            <a href="#team" className="text-sm font-serif uppercase tracking-wider text-on-surface-variant hover:text-on-surface transition-colors">
-              Studio
-            </a>
-            <a href="#contact" className="text-sm font-serif uppercase tracking-wider text-on-surface-variant hover:text-on-surface transition-colors">
-              Connect
-            </a>
+    <main className="w-full overflow-x-hidden pb-28">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+.lp-top-nav { background: rgba(19, 19, 19, 0.45); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255, 255, 255, 0.06); transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; }
+.lp-top-nav.lp-top-nav--scrolled { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(19, 19, 19, 0.72); border-bottom: 1px solid rgba(55, 17, 66, 0.15); }
+@keyframes lpFadeUpHero { to { opacity: 1; transform: translateY(0); } }
+.lp-hero-line1 { opacity: 0; transform: translateY(20px); animation: lpFadeUpHero 0.7s ease forwards; animation-delay: 0ms; }
+.lp-hero-line2 { opacity: 0; transform: translateY(20px); animation: lpFadeUpHero 0.7s ease forwards; animation-delay: 200ms; }
+.lp-hero-line3 { opacity: 0; transform: translateY(20px); animation: lpFadeUpHero 0.7s ease forwards; animation-delay: 400ms; }
+.lp-pill-cta { border-radius: 50px; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+.lp-pill-cta:hover { transform: scale(1.04); box-shadow: 0 0 22px rgba(55, 17, 66, 0.45); }
+.lp-pill-cta:focus-visible { outline: 2px solid rgba(200, 160, 214, 0.5); outline-offset: 3px; }
+[data-lp-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; transition-delay: var(--lp-del, 0ms); }
+[data-lp-reveal].lp-reveal-visible { opacity: 1; transform: translateY(0); }
+.lp-sticky-demo-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 999; transform: translateY(100%); animation: lpStickyBarUp 0.5s ease 1.5s forwards; background: rgba(14, 14, 14, 0.92); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-top: 1px solid rgba(55, 17, 66, 0.2); box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.45); }
+@keyframes lpStickyBarUp { to { transform: translateY(0); } }
+.lp-faq-panel { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.lp-faq-panel.lp-faq-open { max-height: 500px; }
+.lp-faq-chevron { transition: transform 0.35s ease; }
+.lp-faq-chevron.lp-faq-chevron-open { transform: rotate(180deg); }
+.lp-testimonial-card { transition: transform 0.3s ease; }
+.lp-testimonial-card:hover { transform: translateY(-4px); }
+.lp-hero-bg { opacity: 0.26; }
+@media (prefers-reduced-motion: reduce) {
+  .lp-hero-line1, .lp-hero-line2, .lp-hero-line3 { animation: none; opacity: 1; transform: none; }
+  .lp-sticky-demo-bar { animation: none; transform: translateY(0); }
+  [data-lp-reveal] { opacity: 1; transform: none; transition: none; }
+  .lp-pill-cta { transition: none; }
+  .lp-pill-cta:hover { transform: none; box-shadow: none; }
+  .lp-testimonial-card:hover { transform: none; }
+  .lp-faq-panel { transition: none; }
+  .lp-faq-chevron { transition: none; }
+}
+`,
+        }}
+      />
+
+      <nav
+        id="lp-top-bar"
+        className={`lp-top-nav fixed top-0 w-full z-50 ${scrolled ? 'lp-top-nav--scrolled' : ''}`}
+        aria-label="Site"
+      >
+        <div className="max-w-7xl mx-auto px-8 py-6 flex justify-between items-center gap-6">
+          <div className="flex items-baseline gap-3 min-w-0">
+            <div className="text-xl font-serif tracking-tighter text-on-surface truncate">NovaSphere</div>
+            <span className="hidden sm:inline text-[10px] font-sans font-semibold uppercase tracking-widest text-on-surface-variant whitespace-nowrap">
+              PI &amp; immigration intake
+            </span>
           </div>
-          <div className="flex items-center gap-4">
-            <button className="hidden md:block text-xs font-sans font-semibold uppercase tracking-widest px-4 py-2 border border-outline-variant text-on-surface-variant hover:text-on-surface transition-colors">
-              View Reel
-            </button>
-            <button className="bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-6 py-3 hover:bg-white transition-colors duration-300">
-              Primary Action
-            </button>
-          </div>
+          <p className="text-xs text-on-surface-variant font-light max-w-md text-right leading-snug hidden md:block">
+            Fewer dead-end consults. More cases that actually fit your docket.
+          </p>
         </div>
       </nav>
 
       {/* SECTION 1: HERO */}
       <section className="relative min-h-screen w-full flex items-center justify-center pt-32 pb-32 px-8 bg-radial-plum overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-          <img alt="Hero Background" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjOtxx28oSjzWI9OpQoZcd2ZKkU-xWvxSXp8nHrsKyo2OuhWFs7N5Wkfdw0laFCdIgzOzFdCB2bE-MB99VHc8Aj8eKwNkMwYtPTNgfwwYcs8l-hC4iTuUz18jIxvjr-VNVBaNmQVXQnoV64pCeOWm0v-qhJ8nMzO1VR9gyoisAyXHNPvDSw7403lOQSkBxgAXLL3AVpJLwxqSDuEyiQ-gXYDd5C9EL3zPvKVV8PWYAjbtGbNaVkfvQ2hFPUen3uPrd-eUBUh4J3Aq6" />
+        <div className="absolute inset-0 z-0 pointer-events-none lp-hero-bg">
+          <img
+            alt=""
+            className="w-full h-full object-cover"
+            src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=2000&q=80"
+          />
         </div>
-        
+
         <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <h1 className="text-6xl md:text-7xl font-serif tracking-tighter text-on-surface mb-8 leading-tight animate-hero-reveal">
-            A Bold Headline for a Premium{' '}
+          <h1 className="text-6xl md:text-7xl font-serif tracking-tighter text-on-surface mb-8 leading-tight lp-hero-line1">
+            Your intake desk shouldn&apos;t feel like a call center—and for{' '}
             <span className="bg-gradient-to-r from-primary via-[#5a1b6f] to-[#c8a0d6] bg-clip-text text-transparent font-semibold italic">
-              Platform
+              PI &amp; immigration
             </span>
+            , it doesn&apos;t have to.
           </h1>
-          
-          <p className="text-xl text-on-surface-variant mb-12 max-w-3xl mx-auto leading-relaxed tracking-wide font-light">
-            Placeholder copy describing a clear value statement with calm, confident tone.
+
+          <p className="text-xl text-on-surface-variant mb-12 max-w-3xl mx-auto leading-relaxed tracking-wide font-light lp-hero-line2">
+            NovaSphere is the conversational first line: it sorts the tire-kickers, captures what matters for liability or relief, and hands your lawyers a clean brief—so you spend consults on clients you can actually help.
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
-            <button className="bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-white transition-all duration-300 w-full sm:w-auto">
-              Primary Action
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16 lp-hero-line3">
+            <button
+              type="button"
+              onClick={scrollToContact}
+              className="lp-pill-cta bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-white transition-all duration-300 w-full sm:w-auto"
+            >
+              Book a demo
             </button>
-            <button className="bg-primary text-on-primary text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 border border-white/10 hover:bg-primary/90 transition-all duration-300 w-full sm:w-auto flex items-center justify-center gap-2">
+            <button
+              type="button"
+              className="lp-pill-cta bg-primary text-on-primary text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 border border-white/10 hover:bg-primary/90 transition-all duration-300 w-full sm:w-auto flex items-center justify-center gap-2"
+            >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
               </svg>
-              Secondary Action
+              Watch how it works
             </button>
           </div>
 
-          {/* Video Placeholder */}
+          <div
+            id="lp-stats"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16 max-w-3xl mx-auto"
+            aria-live="polite"
+          >
+            <div className="text-center" data-lp-reveal style={{ ['--lp-del' as string]: '0ms' }}>
+              <p className="text-4xl md:text-5xl font-serif text-on-surface mb-2 tabular-nums">{statDisplay.pct}%</p>
+              <p className="text-xs font-sans font-semibold uppercase tracking-widest text-outline">Less noise in intake</p>
+            </div>
+            <div className="text-center" data-lp-reveal style={{ ['--lp-del' as string]: '100ms' }}>
+              <p className="text-4xl md:text-5xl font-serif text-on-surface mb-2 tabular-nums">
+                {statDisplay.mult}×
+              </p>
+              <p className="text-xs font-sans font-semibold uppercase tracking-widest text-outline">Sharper consult focus</p>
+            </div>
+            <div className="text-center" data-lp-reveal style={{ ['--lp-del' as string]: '200ms' }}>
+              <p className="text-4xl md:text-5xl font-serif text-on-surface mb-2">24/7</p>
+              <p className="text-xs font-sans font-semibold uppercase tracking-widest text-outline">Always-on first response</p>
+            </div>
+          </div>
+
           <div className="relative max-w-4xl mx-auto mb-12">
-            <div className="aspect-video bg-surface-container-high/30 border border-outline-variant/40 backdrop-blur-xl rounded-lg overflow-hidden group cursor-pointer hover:bg-surface-container-high/40 transition-colors duration-300 premium-card">
+            <div
+              data-lp-reveal
+              style={{ ['--lp-del' as string]: '0ms' }}
+              className="aspect-video bg-surface-container-high/30 border border-outline-variant/40 backdrop-blur-xl rounded-lg overflow-hidden group cursor-pointer hover:bg-surface-container-high/40 transition-colors duration-300 premium-card"
+            >
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-20 h-20 rounded-lg border border-outline-variant/40 flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform duration-500 bg-surface-container/40">
                   <svg className="w-8 h-8 text-on-surface" fill="currentColor" viewBox="0 0 24 24">
@@ -78,15 +224,14 @@ export default function Home() {
                 </div>
               </div>
               <div className="absolute bottom-6 left-6">
-                <p className="text-xs font-sans font-semibold uppercase tracking-widest text-outline mb-2">Preview</p>
-                <p className="text-sm font-serif italic text-on-surface-variant">Short Showcase Segment</p>
+                <p className="text-xs font-sans font-semibold uppercase tracking-widest text-outline mb-2">See the workflow</p>
+                <p className="text-sm font-serif italic text-on-surface-variant">From web form to qualified brief</p>
               </div>
             </div>
           </div>
 
-          {/* Trust Line */}
           <p className="text-xs font-sans font-semibold uppercase tracking-widest text-outline">
-            Trusted by teams who value clarity, focus, and precision
+            Built for firms where one missed detail costs the case
           </p>
         </div>
       </section>
@@ -94,37 +239,38 @@ export default function Home() {
       {/* SECTION 2: PROBLEM + TEAM + TESTIMONIALS */}
       <section id="product" className="w-full py-32 px-8 bg-surface-container-lowest border-t border-outline-variant/20">
         <div className="max-w-7xl mx-auto">
-          {/* Problem Section */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32">
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-5" data-lp-reveal style={{ ['--lp-del' as string]: '0ms' }}>
               <h2 className="text-5xl md:text-6xl font-serif tracking-tighter text-on-surface mb-8 leading-tight">
-                A Clear Problem Statement Lives Right Here
+                Sound familiar? The inbox is loud—but the docket is finite.
               </h2>
               <p className="text-lg text-on-surface-variant leading-relaxed tracking-wide font-light mb-6">
-                Placeholder supporting text that introduces the challenge and stakes.
+                Personal injury shops drown in soft-tissue noise. Immigration teams get incomplete stories and panicked timelines. In both worlds, the cost isn&apos;t just time—it&apos;s the high-value matter you never got to because you were chasing context.
               </p>
             </div>
 
             <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 {
-                  icon: 'folder_off',
-                  title: 'Misaligned requests',
-                  desc: 'Placeholder line describing wasted effort and low relevance.',
+                  icon: 'gavel',
+                  title: 'Practice fit, fast',
+                  desc: 'Surface PI matters with real liability hooks—and immigration inquiries where relief is plausible, not fantasy.',
                 },
                 {
-                  icon: 'person_cancel',
-                  title: 'Low-fit audiences',
-                  desc: 'Placeholder line describing mismatched audience and scope.',
+                  icon: 'edit_note',
+                  title: 'Complete stories',
+                  desc: 'Missing dates, employers, or medical timelines? The system asks the next smart question before you do.',
                 },
                 {
-                  icon: 'data_alert',
-                  title: 'Missing context',
-                  desc: 'Placeholder line describing gaps that slow progress.',
+                  icon: 'priority_high',
+                  title: 'Priority you can defend',
+                  desc: 'Rank by fit, urgency, and economics so your partners trust the queue—not just whoever shouted loudest online.',
                 },
               ].map((item, idx) => (
                 <div
                   key={idx}
+                  data-lp-reveal
+                  style={{ ['--lp-del' as string]: `${idx * 100}ms` }}
                   className="bg-gradient-to-br from-primary to-[#2a0d33] text-on-primary border border-white/10 rounded-lg p-5 md:p-6 flex flex-col gap-2 min-h-[200px] max-h-[230px] overflow-hidden shadow-[0_18px_40px_rgba(55,17,66,0.35)] transition-colors duration-300 premium-card"
                 >
                   <span className="material-symbols-outlined text-white/85 text-2xl">{item.icon}</span>
@@ -135,25 +281,28 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Team Section */}
           <div className="py-16 border-t border-outline-variant/20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12">
-              <div className="lg:col-span-5">
-                <h3 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Built By Specialists</h3>
+              <div className="lg:col-span-5" data-lp-reveal style={{ ['--lp-del' as string]: '0ms' }}>
+                <h3 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Why we built this</h3>
                 <h2 className="text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-8">
-                  Built by a Team That Values Precision
+                  Because great lawyers shouldn&apos;t burn consults on misfires
                 </h2>
                 <p className="text-base text-on-surface-variant leading-relaxed tracking-wide font-light">
-                  Placeholder paragraph describing team background and design philosophy in a calm, editorial voice.
+                  We come from automation and operations work where the bottleneck is always the same: good judgment trapped behind repetitive triage. NovaSphere gives your intake team air—without dumbing down the standards your name is on.
                 </p>
               </div>
 
               <div className="lg:col-span-7">
-                <div className="bg-surface-container-low/40 border border-outline-variant/30 backdrop-blur-xl rounded-xl p-6 md:p-8 premium-card">
+                <div
+                  data-lp-reveal
+                  style={{ ['--lp-del' as string]: '100ms' }}
+                  className="bg-surface-container-low/40 border border-outline-variant/30 backdrop-blur-xl rounded-xl p-6 md:p-8 premium-card"
+                >
                   {[
-                    { title: 'Strategy / Research', desc: 'Placeholder line describing thoughtful direction' },
-                    { title: 'Design / Systems', desc: 'Placeholder line describing structured craft' },
-                    { title: 'Delivery / Support', desc: 'Placeholder line describing steady execution' },
+                    { title: 'Intake language that sounds human', desc: 'Plain-English prompts that respect trauma and urgency—especially in PI and immigration.' },
+                    { title: 'Firm-safe structure', desc: 'Summaries your partners can skim in seconds: facts, conflicts, timeline, and a recommended next step.' },
+                    { title: 'Handoff without heroics', desc: 'Route to the right attorney, paralegal, or CRM field—so nothing gets retyped at midnight.' },
                   ].map((dept, idx) => (
                     <div
                       key={idx}
@@ -173,32 +322,35 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Testimonials Section */}
           <div className="py-16 border-t border-outline-variant/20">
-            <h2 className="text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-12 text-center">
-              What Clients Are Saying
+            <h2
+              className="text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-12 text-center"
+              data-lp-reveal
+              style={{ ['--lp-del' as string]: '0ms' }}
+            >
+              What firms tell us after the switch
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
-                  text: 'Placeholder quote that highlights a measurable improvement and clear impact.',
-                  author: 'Director, Industry Team',
+                  text: 'We cut morning triage from hours to minutes. Our coordinators finally sound like closers on the phone—not filters.',
+                  author: 'Managing partner, litigation boutique',
                 },
                 {
-                  text: 'Placeholder quote emphasizing clarity, speed, and reduced complexity.',
-                  author: 'Operations Lead, Services Group',
+                  text: 'Consults feel different when the AI already asked the “hard” PI questions. We walk in with a theory of the case.',
+                  author: 'Founder, personal injury practice',
                 },
                 {
-                  text: 'Placeholder quote focused on quality improvements and stronger outcomes.',
-                  author: 'Senior Manager, Client Success',
+                  text: 'Immigration intake used to be a scroll of half-facts. Now we open a file that reads like someone listened the first time.',
+                  author: 'Senior attorney, immigration group',
                 },
               ].map((testimonial, idx) => (
                 <div
                   key={idx}
-                  className="bg-surface-container-high/30 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-8 hover:bg-surface-container-high/50 transition-all duration-300 cursor-pointer premium-card"
-                  onMouseEnter={() => setHoveredTestimonial(idx)}
-                  onMouseLeave={() => setHoveredTestimonial(null)}
+                  data-lp-reveal
+                  style={{ ['--lp-del' as string]: `${idx * 100}ms` }}
+                  className="lp-testimonial-card bg-surface-container-high/30 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-8 cursor-pointer"
                 >
                   <p className="text-base text-on-surface leading-relaxed mb-6 italic">
                     &quot;{testimonial.text}&quot;
@@ -216,7 +368,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-24">
             <div className="lg:col-span-6">
-              <div className="aspect-video bg-surface-container-high/30 border border-outline-variant/30 backdrop-blur-xl rounded-lg overflow-hidden group cursor-pointer hover:bg-surface-container-high/50 transition-colors duration-300 premium-card">
+              <div
+                data-lp-reveal
+                style={{ ['--lp-del' as string]: '0ms' }}
+                className="relative aspect-video bg-surface-container-high/30 border border-outline-variant/30 backdrop-blur-xl rounded-lg overflow-hidden group cursor-pointer hover:bg-surface-container-high/50 transition-colors duration-300 premium-card"
+              >
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-16 h-16 rounded-lg border border-outline-variant/40 flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform duration-500 bg-surface-container/40">
                     <svg className="w-6 h-6 text-on-surface" fill="currentColor" viewBox="0 0 24 24">
@@ -225,27 +381,26 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="absolute top-6 left-6">
-                  <span className="text-xs font-sans font-semibold uppercase tracking-widest text-outline-variant">Showcase Walkthrough</span>
+                  <span className="text-xs font-sans font-semibold uppercase tracking-widest text-outline-variant">Walkthrough</span>
                 </div>
               </div>
             </div>
 
-            <div className="lg:col-span-6 lg:pl-12">
-              <p className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">The Framework</p>
+            <div className="lg:col-span-6 lg:pl-12" data-lp-reveal style={{ ['--lp-del' as string]: '120ms' }}>
+              <p className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">How it works</p>
               <h2 className="text-5xl md:text-6xl font-serif tracking-tighter text-on-surface mb-8 leading-tight">
-                A Structured System for Confident Decisions
+                Instant response. Smarter questions. A queue your partners trust.
               </h2>
               <p className="text-lg text-on-surface-variant leading-relaxed tracking-wide font-light mb-8">
-                Placeholder description of the platform approach, emphasizing clarity and consistency.
+                NovaSphere meets people where they are—web form, chat, email—and returns a structured brief: who they are, what they need, whether you want the consult, and why. You stay in control; the busywork does not.
               </p>
 
-              {/* Key Benefits */}
               <div className="space-y-4">
                 {[
-                  { icon: 'check_circle', text: 'Automated triage and routing' },
-                  { icon: 'check_circle', text: 'Unified intake overview' },
-                  { icon: 'check_circle', text: 'Streamlined handoffs' },
-                  { icon: 'check_circle', text: 'Live status updates' },
+                  { icon: 'check_circle', text: 'PI: liability, treatment, and damages signals captured early' },
+                  { icon: 'check_circle', text: 'Immigration: relief path, deadlines, and evidence gaps flagged' },
+                  { icon: 'check_circle', text: 'Consistent tone that protects trust before a human says hello' },
+                  { icon: 'check_circle', text: 'Routing rules that mirror how your firm already decides' },
                 ].map((benefit, idx) => (
                   <div key={idx} className="flex items-center gap-4">
                     <span className="material-symbols-outlined text-[#c8a0d6] text-xl">{benefit.icon}</span>
@@ -254,33 +409,87 @@ export default function Home() {
                 ))}
               </div>
 
-              <button className="mt-10 bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-white transition-all duration-300">
-                Request a Walkthrough
+              <button
+                type="button"
+                onClick={scrollToContact}
+                className="lp-pill-cta mt-10 bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-white transition-all duration-300"
+              >
+                Book a demo
               </button>
+            </div>
+          </div>
+
+          <div id="faq" className="max-w-3xl mx-auto border-t border-outline-variant/20 pt-24">
+            <h2
+              className="text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-4 text-center"
+              data-lp-reveal
+              style={{ ['--lp-del' as string]: '0ms' }}
+            >
+              Questions partners ask before they say yes
+            </h2>
+            <p
+              className="text-center text-on-surface-variant font-light mb-12 max-w-xl mx-auto"
+              data-lp-reveal
+              style={{ ['--lp-del' as string]: '80ms' }}
+            >
+              Straight answers—no jargon wall. If you want this mapped to your exact workflow, that is what the demo is for.
+            </p>
+            <div className="space-y-3">
+              {faqItems.map((item, i) => {
+                const open = openFaq === i
+                return (
+                  <div
+                    key={item.q}
+                    data-lp-reveal
+                    style={{ ['--lp-del' as string]: `${i * 100}ms` }}
+                    className="border border-outline-variant/30 rounded-lg bg-surface-container-low/40 backdrop-blur-xl overflow-hidden"
+                  >
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-between gap-4 text-left px-5 py-4"
+                      aria-expanded={open}
+                      onClick={() => setOpenFaq(open ? null : i)}
+                    >
+                      <span className="text-sm md:text-base font-serif text-on-surface pr-2">{item.q}</span>
+                      <span
+                        className={`material-symbols-outlined text-on-surface-variant shrink-0 lp-faq-chevron ${open ? 'lp-faq-chevron-open' : ''}`}
+                        aria-hidden
+                      >
+                        expand_more
+                      </span>
+                    </button>
+                    <div className={`lp-faq-panel px-5 ${open ? 'lp-faq-open' : ''}`}>
+                      <p className="text-sm text-on-surface-variant leading-relaxed pb-4 pr-2">{item.a}</p>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
       </section>
 
       {/* SECTION 4: CALENDLY / CTA */}
-      <section id="contact" className="w-full py-32 px-8 bg-surface-container-lowest border-t border-outline-variant/20">
+      <section id="contact" className="w-full py-32 px-8 bg-surface-container-lowest border-t border-outline-variant/20 scroll-mt-28">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl md:text-6xl font-serif tracking-tighter text-on-surface mb-6">
-            A Clear Call to Action Lives Here
+          <h2 className="text-5xl md:text-6xl font-serif tracking-tighter text-on-surface mb-6" data-lp-reveal style={{ ['--lp-del' as string]: '0ms' }}>
+            Let&apos;s make intake feel like a conversation—not a chore
           </h2>
-          
-          <p className="text-xl text-on-surface-variant mb-8 leading-relaxed tracking-wide font-light">
-            In a short session, we will cover:
+
+          <p className="text-xl text-on-surface-variant mb-8 leading-relaxed tracking-wide font-light" data-lp-reveal style={{ ['--lp-del' as string]: '100ms' }}>
+            In one short session, we&apos;ll show you:
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {[
-              'Where the workflow can be clarified',
-              'How to reduce friction in key steps',
-              'What a better process looks like',
+              'How inquiries become a partner-ready brief',
+              'How PI and immigration signals are separated from noise',
+              'How your team keeps control without living in the inbox',
             ].map((item, idx) => (
               <div
                 key={idx}
+                data-lp-reveal
+                style={{ ['--lp-del' as string]: `${idx * 100}ms` }}
                 className="bg-surface-container-low/40 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-6 hover:bg-surface-container-low/60 transition-colors duration-300 premium-card"
               >
                 <p className="text-base text-on-surface leading-relaxed">{item}</p>
@@ -288,8 +497,11 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Calendly Embed Placeholder */}
-          <div className="bg-surface-container-high/30 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-12 mb-8">
+          <div
+            className="bg-surface-container-high/30 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-12 mb-8"
+            data-lp-reveal
+            style={{ ['--lp-del' as string]: '0ms' }}
+          >
             <div className="bg-surface-container-high/40 rounded border border-outline-variant/40 py-12 text-center">
               <p className="text-on-surface-variant font-light mb-2">Scheduling widget embedded here</p>
               <p className="text-xs font-sans uppercase tracking-widest text-outline-variant">
@@ -298,8 +510,12 @@ export default function Home() {
             </div>
           </div>
 
-          <button className="bg-primary text-on-primary text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-primary/90 transition-all duration-300">
-            Schedule a Session
+          <button
+            type="button"
+            onClick={scrollToContact}
+            className="lp-pill-cta bg-primary text-on-primary text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-primary/90 transition-all duration-300"
+          >
+            Book a demo
           </button>
         </div>
       </section>
@@ -309,31 +525,44 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
             <div>
-              <h3 className="text-lg font-serif tracking-tighter text-on-surface mb-4">Lumina Axis</h3>
+              <h3 className="text-lg font-serif tracking-tighter text-on-surface mb-4">NovaSphere</h3>
               <p className="text-sm text-on-surface-variant leading-relaxed">
-                Placeholder description of the brand and its clear point of view.
+                AI-assisted lead qualification for personal injury and immigration firms—so your best cases surface first.
               </p>
             </div>
 
             <div>
               <h4 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Explore</h4>
               <ul className="space-y-3">
-                {['Overview', 'Process', 'Details', 'Updates'].map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-sm text-on-surface-variant hover:text-on-surface transition-colors">
-                      {link}
-                    </a>
-                  </li>
-                ))}
+                <li>
+                  <a href="#product" className="text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                    Product
+                  </a>
+                </li>
+                <li>
+                  <a href="#solution" className="text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                    How it works
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                    Privacy policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#contact" className="text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
 
             <div>
               <h4 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Resources</h4>
               <ul className="space-y-3">
-                {['Documentation', 'Guides', 'Contact', 'LinkedIn'].map((link) => (
+                {['FAQ', 'Documentation', 'LinkedIn'].map((link) => (
                   <li key={link}>
-                    <a href="#" className="text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                    <a href={link === 'FAQ' ? '#faq' : '#'} className="text-sm text-on-surface-variant hover:text-on-surface transition-colors">
                       {link}
                     </a>
                   </li>
@@ -343,12 +572,25 @@ export default function Home() {
           </div>
 
           <div className="border-t border-outline-variant/20 pt-8">
-            <p className="text-xs text-on-surface-variant text-center">
-              © 2024 Lumina Axis. All rights reserved. Placeholder legal line here.
-            </p>
+            <p className="text-xs text-on-surface-variant text-center">© 2026 NovaSphere. All rights reserved.</p>
           </div>
         </div>
       </footer>
+
+      <div className="lp-sticky-demo-bar" role="region" aria-label="Book a demo">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-on-surface-variant font-light text-center sm:text-left">
+            <span className="text-on-surface font-serif">Still scrolling?</span> If intake is eating your week, let&apos;s fix that in one call.
+          </p>
+          <button
+            type="button"
+            onClick={scrollToContact}
+            className="lp-pill-cta bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-8 py-3.5 hover:bg-white shrink-0 w-full sm:w-auto"
+          >
+            Book a demo
+          </button>
+        </div>
+      </div>
     </main>
   )
 }
