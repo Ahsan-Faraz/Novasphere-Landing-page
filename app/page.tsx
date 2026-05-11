@@ -54,7 +54,11 @@ export default function Home() {
 
   useEffect(() => {
     const onScroll = () => {
-      if (!statsHasScrolled.current) statsHasScrolled.current = true
+      const firstScroll = !statsHasScrolled.current
+      if (firstScroll) {
+        statsHasScrolled.current = true
+        if (statsIsVisible.current) startStatsAnimation()
+      }
       setScrolled(window.scrollY > 50)
     }
     setScrolled(window.scrollY > 50)
@@ -585,67 +589,67 @@ export default function Home() {
             style={{ ['--lp-del' as string]: '0ms' }}
           >
             <div className="bg-surface-container-high/40 rounded border border-outline-variant/40 py-10 text-center">
-              {!demoSubmitted ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    setDemoSubmitted(true)
-                  }}
-                  className="max-w-xl mx-auto px-2"
-                >
-                  <div className="space-y-4 text-left">
-                    <div>
-                      <label className="text-xs font-sans font-semibold uppercase tracking-widest text-on-surface-variant">
-                        Name
-                      </label>
-                      <input
-                        required
-                        type="text"
-                        value={demoForm.name}
-                        onChange={(e) => setDemoForm((s) => ({ ...s, name: e.target.value }))}
-                        className="mt-2 w-full bg-background/40 border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface outline-none focus:border-[#c8a0d6]/40"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-xs font-sans font-semibold uppercase tracking-widest text-on-surface-variant">
-                        Email
-                      </label>
-                      <input
-                        required
-                        type="email"
-                        value={demoForm.email}
-                        onChange={(e) => setDemoForm((s) => ({ ...s, email: e.target.value }))}
-                        className="mt-2 w-full bg-background/40 border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface outline-none focus:border-[#c8a0d6]/40"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-xs font-sans font-semibold uppercase tracking-widest text-on-surface-variant">
-                        Firm name
-                      </label>
-                      <input
-                        required
-                        type="text"
-                        value={demoForm.firm}
-                        onChange={(e) => setDemoForm((s) => ({ ...s, firm: e.target.value }))}
-                        className="mt-2 w-full bg-background/40 border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface outline-none focus:border-[#c8a0d6]/40"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="lp-pill-cta bg-primary text-on-primary text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-primary/90 transition-all duration-300 w-full sm:w-auto"
-                    >
-                      Book My Demo →
-                    </button>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  setDemoSubmitted(true)
+                }}
+                className="max-w-xl mx-auto px-2"
+              >
+                <div className="space-y-4 text-left">
+                  <div>
+                    <label className="text-xs font-sans font-semibold uppercase tracking-widest text-on-surface-variant">
+                      Name
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={demoForm.name}
+                      onChange={(e) => setDemoForm((s) => ({ ...s, name: e.target.value }))}
+                      className="mt-2 w-full bg-background/40 border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface outline-none focus:border-[#c8a0d6]/40"
+                    />
                   </div>
-                </form>
-              ) : (
-                <div className="space-y-2">
-                  <p className="text-on-surface-variant font-light">We'll be in touch within one business day.</p>
+
+                  <div>
+                    <label className="text-xs font-sans font-semibold uppercase tracking-widest text-on-surface-variant">
+                      Email
+                    </label>
+                    <input
+                      required
+                      type="email"
+                      value={demoForm.email}
+                      onChange={(e) => setDemoForm((s) => ({ ...s, email: e.target.value }))}
+                      className="mt-2 w-full bg-background/40 border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface outline-none focus:border-[#c8a0d6]/40"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-sans font-semibold uppercase tracking-widest text-on-surface-variant">
+                      Firm name
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={demoForm.firm}
+                      onChange={(e) => setDemoForm((s) => ({ ...s, firm: e.target.value }))}
+                      className="mt-2 w-full bg-background/40 border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface outline-none focus:border-[#c8a0d6]/40"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="lp-pill-cta bg-primary text-on-primary text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-primary/90 transition-all duration-300 w-full sm:w-auto"
+                  >
+                    Book My Demo →
+                  </button>
                 </div>
-              )}
+
+                {demoSubmitted ? (
+                  <p className="text-on-surface-variant font-light mt-4">
+                    We'll be in touch within one business day.
+                  </p>
+                ) : null}
+              </form>
             </div>
           </div>
 
