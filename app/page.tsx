@@ -316,7 +316,7 @@ export default function Home() {
             <p className="text-center text-sm text-on-surface-variant leading-relaxed">
               For{' '}
               <span className="font-semibold text-on-surface">PI and immigration</span> law firms doing{' '}
-              <span className="font-bold text-primary">$20k to $200k/month</span> that want more qualified consultation
+              <span className="font-bold text-purple-600">$20k to $200k/month</span> that want more qualified consultation
               bookings, without hiring more staff.
             </p>
           </div>
