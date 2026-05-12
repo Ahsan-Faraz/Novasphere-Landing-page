@@ -7,7 +7,6 @@ function easeOutCubic(t: number) {
 }
 
 export default function Home() {
-  const [scrolled, setScrolled] = useState(false)
   const [openFaq, setOpenFaq] = useState<number | null>(0)
   const statsDone = useRef(false)
   const statsHasScrolled = useRef(false)
@@ -59,9 +58,7 @@ export default function Home() {
         statsHasScrolled.current = true
         if (statsIsVisible.current) startStatsAnimation()
       }
-      setScrolled(window.scrollY > 50)
     }
-    setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [startStatsAnimation])
@@ -122,8 +119,6 @@ export default function Home() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-.lp-top-nav { background: rgba(19, 19, 19, 0.45); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255, 255, 255, 0.06); transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; }
-.lp-top-nav.lp-top-nav--scrolled { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(19, 19, 19, 0.72); border-bottom: 1px solid rgba(55, 17, 66, 0.15); }
 @keyframes lpFadeUpHero { to { opacity: 1; transform: translateY(0); } }
 .lp-hero-line1 { opacity: 0; transform: translateY(20px); animation: lpFadeUpHero 0.7s ease forwards; animation-delay: 0ms; }
 .lp-hero-line2 { opacity: 0; transform: translateY(20px); animation: lpFadeUpHero 0.7s ease forwards; animation-delay: 200ms; }
@@ -167,26 +162,8 @@ export default function Home() {
         }}
       />
 
-      <nav
-        id="lp-top-bar"
-        className={`lp-top-nav fixed top-0 w-full z-50 ${scrolled ? 'lp-top-nav--scrolled' : ''}`}
-        aria-label="Site"
-      >
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4 sm:py-6 flex justify-between items-center gap-6">
-          <div className="flex items-baseline gap-3 min-w-0">
-            <div className="text-lg sm:text-xl font-serif tracking-tighter text-on-surface truncate">NovaSphere</div>
-            <span className="hidden sm:inline text-[10px] font-sans font-semibold uppercase tracking-widest lp-accent-label whitespace-nowrap">
-              PI &amp; immigration intake
-            </span>
-          </div>
-          <p className="text-xs text-on-surface-variant font-light max-w-md text-right leading-snug hidden md:block">
-            Fewer dead-end consults. More cases that actually fit your docket.
-          </p>
-        </div>
-      </nav>
-
       {/* SECTION 1: HERO */}
-      <section className="relative min-h-screen w-full flex items-center justify-center pt-28 pb-20 sm:pt-32 sm:pb-28 px-6 sm:px-8 bg-radial-plum overflow-hidden">
+      <section className="relative min-h-screen w-full flex items-center justify-center pt-20 pb-20 sm:pt-24 sm:pb-28 px-6 sm:px-8 bg-radial-plum overflow-hidden">
         <div className="absolute inset-0 z-0 pointer-events-none lp-hero-bg">
           <img
             alt=""
@@ -198,7 +175,7 @@ export default function Home() {
         <div className="relative z-10 max-w-5xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif tracking-tighter text-on-surface mb-8 leading-tight lp-hero-line1">
             Your intake desk shouldn&apos;t feel like a call center. For{' '}
-            <span className="bg-gradient-to-r from-primary via-[#5a1b6f] to-[#c8a0d6] bg-clip-text text-transparent font-semibold italic lp-hero-accent">
+            <span className="bg-gradient-to-r from-primary via-[#d775f8] to-[#c8a0d6] bg-clip-text text-transparent font-semibold italic lp-hero-accent">
               PI &amp; immigration
             </span>
             , it doesn&apos;t have to.
@@ -726,9 +703,18 @@ export default function Home() {
 
       <div className="lp-sticky-demo-bar" role="region" aria-label="Book a demo">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-on-surface-variant font-light text-center sm:text-left">
-            Every unqualified lead costs your firm time and money. Fix intake this week.
-          </p>
+          
+          <img
+            src="/novawhite.png"
+            alt="NovaSphere"
+            className="h-6 sm:h-7 w-auto"
+          />
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+    
+            <p className="text-sm text-on-surface-variant font-light">
+              Every unqualified lead costs your firm time and money. Fix intake this week.
+            </p>
+          </div>
           <button
             type="button"
             onClick={scrollToContact}
