@@ -105,11 +105,11 @@ export default function Home() {
   const faqItems = [
     {
       q: 'How does the AI qualify personal injury and immigration leads?',
-      a: 'It reads each inquiry like an intake coordinator would: practice fit, urgency, jurisdiction, and completeness. High-signal PI matters (clear liability windows, treatment timeline, damages story) and immigration paths with realistic timelines surface first—so your team replies in the right order.',
+      a: 'It reads each inquiry like an intake coordinator would: practice fit, urgency, jurisdiction, and completeness. High-signal PI matters (clear liability windows, treatment timeline, damages story) and immigration paths with realistic timelines surface first so your team replies in the right order.',
     },
     {
       q: 'Will this fit how our firm already handles intake?',
-      a: 'Yes. Think of it as a first pass that tags, summarizes, and routes—your policies stay yours. Firms keep their existing channels; we reduce the noise before a human ever picks up the phone.',
+      a: 'Yes. Think of it as a first pass that tags, summarizes, and routes. Your policies stay yours. Firms keep their existing channels; we reduce the noise before a human ever picks up the phone.',
     },
     {
       q: 'How fast can we go live?',
@@ -147,7 +147,11 @@ export default function Home() {
 .lp-faq-chevron.lp-faq-chevron-open { transform: rotate(180deg); }
 .lp-testimonial-card { transition: transform 0.3s ease; }
 .lp-testimonial-card:hover { transform: translateY(-4px); }
+.lp-accent-text { color: #f4e8f8; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45); }
+.lp-accent-label { color: #f0dbf6; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35); }
+.lp-hero-accent { text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55); }
 .lp-hero-bg { opacity: 0.26; }
+@media (max-width: 640px) { .lp-hero-bg { opacity: 0.38; } }
 @media (prefers-reduced-motion: reduce) {
   .lp-hero-line1, .lp-hero-line2, .lp-hero-line3 { animation: none; opacity: 1; transform: none; }
   .lp-sticky-demo-bar { animation: none; transform: translateY(0); }
@@ -168,10 +172,10 @@ export default function Home() {
         className={`lp-top-nav fixed top-0 w-full z-50 ${scrolled ? 'lp-top-nav--scrolled' : ''}`}
         aria-label="Site"
       >
-        <div className="max-w-7xl mx-auto px-8 py-6 flex justify-between items-center gap-6">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4 sm:py-6 flex justify-between items-center gap-6">
           <div className="flex items-baseline gap-3 min-w-0">
-            <div className="text-xl font-serif tracking-tighter text-on-surface truncate">NovaSphere</div>
-            <span className="hidden sm:inline text-[10px] font-sans font-semibold uppercase tracking-widest text-on-surface-variant whitespace-nowrap">
+            <div className="text-lg sm:text-xl font-serif tracking-tighter text-on-surface truncate">NovaSphere</div>
+            <span className="hidden sm:inline text-[10px] font-sans font-semibold uppercase tracking-widest lp-accent-label whitespace-nowrap">
               PI &amp; immigration intake
             </span>
           </div>
@@ -182,7 +186,7 @@ export default function Home() {
       </nav>
 
       {/* SECTION 1: HERO */}
-      <section className="relative min-h-screen w-full flex items-center justify-center pt-32 pb-32 px-8 bg-radial-plum overflow-hidden">
+      <section className="relative min-h-screen w-full flex items-center justify-center pt-28 pb-20 sm:pt-32 sm:pb-28 px-6 sm:px-8 bg-radial-plum overflow-hidden">
         <div className="absolute inset-0 z-0 pointer-events-none lp-hero-bg">
           <img
             alt=""
@@ -192,22 +196,22 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <h1 className="text-6xl md:text-7xl font-serif tracking-tighter text-on-surface mb-8 leading-tight lp-hero-line1">
-            Your intake desk shouldn&apos;t feel like a call center—and for{' '}
-            <span className="bg-gradient-to-r from-primary via-[#5a1b6f] to-[#c8a0d6] bg-clip-text text-transparent font-semibold italic">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif tracking-tighter text-on-surface mb-8 leading-tight lp-hero-line1">
+            Your intake desk shouldn&apos;t feel like a call center. For{' '}
+            <span className="bg-gradient-to-r from-primary via-[#5a1b6f] to-[#c8a0d6] bg-clip-text text-transparent font-semibold italic lp-hero-accent">
               PI &amp; immigration
             </span>
             , it doesn&apos;t have to.
           </h1>
 
-          <div className="mb-12 max-w-3xl mx-auto leading-relaxed tracking-wide font-light lp-hero-line2">
-            <p className="text-xl text-[#c8a0d6] mb-3">PI &amp; immigration intake, handled.</p>
-            <p className="text-xl text-on-surface-variant">
+          <div className="mb-10 sm:mb-12 max-w-3xl mx-auto leading-relaxed tracking-wide font-light lp-hero-line2">
+            <p className="text-base sm:text-lg md:text-xl lp-accent-text mb-3">PI &amp; immigration intake, handled.</p>
+            <p className="text-base sm:text-lg md:text-xl text-on-surface-variant">
               NovaSphere sorts the noise, captures what matters, and hands your lawyers a clean brief.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16 lp-hero-line3">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-12 sm:mb-16 lp-hero-line3">
             <button
               type="button"
               onClick={scrollToContact}
@@ -227,7 +231,7 @@ export default function Home() {
           </div>
 
           <div
-            className="max-w-3xl mx-auto border-t border-outline-variant/20 border-b border-outline-variant/20 py-3 opacity-60"
+            className="max-w-3xl mx-auto border-t border-outline-variant/20 border-b border-outline-variant/20 py-3 opacity-70"
             data-lp-reveal
             style={{ ['--lp-del' as string]: '240ms' }}
           >
@@ -238,26 +242,26 @@ export default function Home() {
 
           <div
             id="lp-stats"
-            className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16 max-w-3xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-16 max-w-3xl mx-auto"
             aria-live="polite"
           >
             <div className="text-center" data-lp-reveal style={{ ['--lp-del' as string]: '0ms' }}>
-              <p className="text-4xl md:text-5xl font-serif text-on-surface mb-2 tabular-nums">{statDisplay.pct}%</p>
+              <p className="text-3xl sm:text-4xl md:text-5xl font-serif text-on-surface mb-2 tabular-nums">{statDisplay.pct}%</p>
               <p className="text-xs font-sans font-semibold uppercase tracking-widest text-outline">Less noise in intake</p>
             </div>
             <div className="text-center" data-lp-reveal style={{ ['--lp-del' as string]: '100ms' }}>
-              <p className="text-4xl md:text-5xl font-serif text-on-surface mb-2 tabular-nums">
+              <p className="text-3xl sm:text-4xl md:text-5xl font-serif text-on-surface mb-2 tabular-nums">
                 {statDisplay.mult}×
               </p>
               <p className="text-xs font-sans font-semibold uppercase tracking-widest text-outline">Sharper consult focus</p>
             </div>
             <div className="text-center" data-lp-reveal style={{ ['--lp-del' as string]: '200ms' }}>
-              <p className="text-4xl md:text-5xl font-serif text-on-surface mb-2">24/7</p>
+              <p className="text-3xl sm:text-4xl md:text-5xl font-serif text-on-surface mb-2">24/7</p>
               <p className="text-xs font-sans font-semibold uppercase tracking-widest text-outline">Always-on first response</p>
             </div>
           </div>
 
-          <div className="relative max-w-4xl mx-auto mb-12">
+          <div className="relative max-w-4xl mx-auto mb-10 sm:mb-12">
             <div
               data-lp-reveal
               style={{ ['--lp-del' as string]: '0ms' }}
@@ -290,15 +294,15 @@ export default function Home() {
       </section>
 
       {/* SECTION 2: PROBLEM + TEAM + TESTIMONIALS */}
-      <section id="product" className="w-full py-32 px-8 bg-surface-container-lowest border-t border-outline-variant/20">
+      <section id="product" className="w-full py-20 sm:py-28 px-6 sm:px-8 bg-surface-container-lowest border-t border-outline-variant/20">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 mb-16 sm:mb-32">
             <div className="lg:col-span-5" data-lp-reveal style={{ ['--lp-del' as string]: '0ms' }}>
-              <h2 className="text-5xl md:text-6xl font-serif tracking-tighter text-on-surface mb-8 leading-tight">
-                Sound familiar? The inbox is loud—but the docket is finite.
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif tracking-tighter text-on-surface mb-6 sm:mb-8 leading-tight">
+                Sound familiar? The inbox is loud, but the docket is finite.
               </h2>
-              <p className="text-lg text-on-surface-variant leading-relaxed tracking-wide font-light mb-6">
-                Personal injury shops drown in soft-tissue noise. Immigration teams get incomplete stories and panicked timelines. In both worlds, the cost isn&apos;t just time—it&apos;s the high-value matter you never got to because you were chasing context.
+              <p className="text-base sm:text-lg text-on-surface-variant leading-relaxed tracking-wide font-light mb-6">
+                Personal injury shops drown in soft-tissue noise. Immigration teams get incomplete stories and panicked timelines. In both worlds, the cost isn&apos;t just time. It&apos;s the high-value matter you never got to because you were chasing context.
               </p>
             </div>
 
@@ -307,7 +311,7 @@ export default function Home() {
                 {
                   icon: 'gavel',
                   title: 'Practice fit, fast',
-                  desc: 'Surface PI matters with real liability hooks—and immigration inquiries where relief is plausible, not fantasy.',
+                  desc: 'Surface PI matters with real liability hooks, and immigration inquiries where relief is plausible, not fantasy.',
                 },
                 {
                   icon: 'edit_note',
@@ -317,14 +321,14 @@ export default function Home() {
                 {
                   icon: 'priority_high',
                   title: 'Priority you can defend',
-                  desc: 'Rank by fit, urgency, and economics so your partners trust the queue—not just whoever shouted loudest online.',
+                  desc: 'Rank by fit, urgency, and economics so your partners trust the queue, not just whoever shouted loudest online.',
                 },
               ].map((item, idx) => (
                 <div
                   key={idx}
                   data-lp-reveal
                   style={{ ['--lp-del' as string]: `${idx * 100}ms` }}
-                  className="bg-gradient-to-br from-primary to-[#2a0d33] text-on-primary border border-white/10 rounded-lg p-5 md:p-6 flex flex-col gap-2 min-h-[200px] max-h-[230px] overflow-hidden shadow-[0_18px_40px_rgba(55,17,66,0.35)] transition-colors duration-300 premium-card"
+                  className="bg-gradient-to-br from-primary to-[#2a0d33] text-on-primary border border-white/10 rounded-lg p-5 md:p-6 flex flex-col gap-2 min-h-[180px] sm:min-h-[200px] max-h-[230px] overflow-hidden shadow-[0_18px_40px_rgba(55,17,66,0.35)] transition-colors duration-300 premium-card"
                 >
                   <span className="material-symbols-outlined text-white/85 text-2xl">{item.icon}</span>
                   <h3 className="text-lg font-serif text-white">{item.title}</h3>
@@ -334,15 +338,15 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="pt-32 pb-16 border-t border-outline-variant/20">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12">
+          <div className="pt-20 sm:pt-28 pb-12 sm:pb-16 border-t border-outline-variant/20">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 mb-12">
               <div className="lg:col-span-5" data-lp-reveal style={{ ['--lp-del' as string]: '0ms' }}>
-                <h3 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Why we built this</h3>
-                <h2 className="text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-8">
+                <h3 className="text-xs font-sans font-semibold uppercase tracking-widest lp-accent-label mb-6">Why we built this</h3>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-6 sm:mb-8">
                   Because great lawyers shouldn&apos;t burn consults on misfires
                 </h2>
                 <p className="text-base text-on-surface-variant leading-relaxed tracking-wide font-light">
-                  We come from automation and operations work where the bottleneck is always the same: good judgment trapped behind repetitive triage. NovaSphere gives your intake team air—without dumbing down the standards your name is on.
+                  We come from automation and operations work where the bottleneck is always the same: good judgment trapped behind repetitive triage. NovaSphere gives your intake team air without dumbing down the standards your name is on.
                 </p>
               </div>
 
@@ -353,16 +357,16 @@ export default function Home() {
                   className="bg-surface-container-low/40 border border-outline-variant/30 backdrop-blur-xl rounded-xl p-6 md:p-8 premium-card"
                 >
                   {[
-                    { title: 'Intake language that sounds human', desc: 'Plain-English prompts that respect trauma and urgency—especially in PI and immigration.' },
+                    { title: 'Intake language that sounds human', desc: 'Plain-English prompts that respect trauma and urgency, especially in PI and immigration.' },
                     { title: 'Firm-safe structure', desc: 'Summaries your partners can skim in seconds: facts, conflicts, timeline, and a recommended next step.' },
-                    { title: 'Handoff without heroics', desc: 'Route to the right attorney, paralegal, or CRM field—so nothing gets retyped at midnight.' },
+                    { title: 'Handoff without heroics', desc: 'Route to the right attorney, paralegal, or CRM field so nothing gets retyped at midnight.' },
                   ].map((dept, idx) => (
                     <div
                       key={idx}
                       className="flex items-start gap-4 border-t border-outline-variant/20 pt-6 first:border-t-0 first:pt-0"
                     >
                       <div className="h-10 w-10 rounded-lg bg-primary/20 border border-white/10 flex items-center justify-center">
-                        <span className="text-[#c8a0d6] text-xs font-sans font-semibold">0{idx + 1}</span>
+                        <span className="lp-accent-text text-xs font-sans font-semibold">0{idx + 1}</span>
                       </div>
                       <div>
                         <h4 className="text-sm font-serif text-on-surface mb-2">{dept.title}</h4>
@@ -375,9 +379,9 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="pt-32 pb-16 border-t border-outline-variant/20">
+          <div className="pt-20 sm:pt-28 pb-12 sm:pb-16 border-t border-outline-variant/20">
             <h2
-              className="text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-12 text-center"
+              className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-10 sm:mb-12 text-center"
               data-lp-reveal
               style={{ ['--lp-del' as string]: '0ms' }}
             >
@@ -387,7 +391,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
-                  text: 'We cut morning triage from hours to minutes. Our coordinators finally sound like closers on the phone—not filters.',
+                  text: 'We cut morning triage from hours to minutes. Our coordinators finally sound like closers on the phone, not filters.',
                   author: 'Managing Partner, litigation boutique',
                 },
                 {
@@ -418,7 +422,7 @@ export default function Home() {
                     return (
                       <>
                         <div className="flex items-center gap-4 mb-4">
-                          <div className="h-10 w-10 rounded-full flex items-center justify-center bg-primary/20 border border-[#c8a0d6]/25 text-[#c8a0d6] font-sans font-semibold">
+                          <div className="h-10 w-10 rounded-full flex items-center justify-center bg-primary/20 border border-[#c8a0d6]/25 lp-accent-text font-sans font-semibold">
                             {initials}
                           </div>
                           <p className="text-sm text-on-surface-variant font-sans leading-tight">
@@ -432,7 +436,7 @@ export default function Home() {
                           </p>
                         </div>
 
-                        <p className="text-[#c8a0d6] text-sm tracking-widest mb-4" aria-hidden>
+                        <p className="lp-accent-text text-sm tracking-widest mb-4" aria-hidden>
                           ★★★★★
                         </p>
 
@@ -450,9 +454,9 @@ export default function Home() {
       </section>
 
       {/* SECTION 3: SOLUTION + KEY BENEFITS */}
-      <section id="solution" className="w-full py-32 px-8 bg-background border-t border-outline-variant/20">
+      <section id="solution" className="w-full py-20 sm:py-28 px-6 sm:px-8 bg-background border-t border-outline-variant/20">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 items-center mb-20 sm:mb-24">
             <div className="lg:col-span-6">
               <div
                 data-lp-reveal
@@ -473,12 +477,12 @@ export default function Home() {
             </div>
 
             <div className="lg:col-span-6 lg:pl-12" data-lp-reveal style={{ ['--lp-del' as string]: '120ms' }}>
-              <p className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">How it works</p>
-              <h2 className="text-5xl md:text-6xl font-serif tracking-tighter text-on-surface mb-8 leading-tight">
+              <p className="text-xs font-sans font-semibold uppercase tracking-widest lp-accent-label mb-6">How it works</p>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif tracking-tighter text-on-surface mb-6 sm:mb-8 leading-tight">
                 Instant response. Smarter questions. A queue your partners trust.
               </h2>
-              <p className="text-lg text-on-surface-variant leading-relaxed tracking-wide font-light mb-8">
-                NovaSphere meets people where they are—web form, chat, email—and returns a structured brief: who they are, what they need, whether you want the consult, and why. You stay in control; the busywork does not.
+              <p className="text-base sm:text-lg text-on-surface-variant leading-relaxed tracking-wide font-light mb-6 sm:mb-8">
+                NovaSphere meets people where they are (web form, chat, email) and returns a structured brief: who they are, what they need, whether you want the consult, and why. You stay in control; the busywork does not.
               </p>
 
               <div className="space-y-4">
@@ -489,8 +493,8 @@ export default function Home() {
                   { icon: 'check_circle', text: 'Routing rules that mirror how your firm already decides' },
                 ].map((benefit, idx) => (
                   <div key={idx} className="flex items-center gap-4">
-                    <span className="material-symbols-outlined text-[#c8a0d6] text-xl">{benefit.icon}</span>
-                    <p className="text-base text-on-surface font-light">{benefit.text}</p>
+                    <span className="material-symbols-outlined lp-accent-text text-xl">{benefit.icon}</span>
+                    <p className="text-sm sm:text-base text-on-surface font-light">{benefit.text}</p>
                   </div>
                 ))}
               </div>
@@ -498,27 +502,27 @@ export default function Home() {
               <button
                 type="button"
                 onClick={scrollToContact}
-                className="lp-pill-cta mt-10 bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-white transition-all duration-300"
+                className="lp-pill-cta mt-8 sm:mt-10 bg-secondary text-background text-xs font-sans font-semibold uppercase tracking-widest px-8 py-4 hover:bg-white transition-all duration-300"
               >
                 Book a demo
               </button>
             </div>
           </div>
 
-          <div id="faq" className="max-w-3xl mx-auto border-t border-outline-variant/20 pt-32">
+          <div id="faq" className="max-w-3xl mx-auto border-t border-outline-variant/20 pt-20 sm:pt-28">
             <h2
-              className="text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-4 text-center"
+              className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-tighter text-on-surface mb-4 text-center"
               data-lp-reveal
               style={{ ['--lp-del' as string]: '0ms' }}
             >
               Questions partners ask before they say yes
             </h2>
             <p
-              className="text-center text-on-surface-variant font-light mb-12 max-w-xl mx-auto"
+              className="text-center text-on-surface-variant font-light mb-10 sm:mb-12 max-w-xl mx-auto text-sm sm:text-base"
               data-lp-reveal
               style={{ ['--lp-del' as string]: '80ms' }}
             >
-              Straight answers—no jargon wall. If you want this mapped to your exact workflow, that is what the demo is for.
+              Straight answers, no jargon wall. If you want this mapped to your exact workflow, that is what the demo is for.
             </p>
             <div className="space-y-3">
               {faqItems.map((item, i) => {
@@ -556,17 +560,17 @@ export default function Home() {
       </section>
 
       {/* SECTION 4: CALENDLY / CTA */}
-      <section id="contact" className="w-full py-32 px-8 bg-surface-container-lowest border-t border-outline-variant/20 scroll-mt-28">
+      <section id="contact" className="w-full py-20 sm:py-28 px-6 sm:px-8 bg-surface-container-lowest border-t border-outline-variant/20 scroll-mt-28">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl md:text-6xl font-serif tracking-tighter text-on-surface mb-6" data-lp-reveal style={{ ['--lp-del' as string]: '0ms' }}>
-            Let&apos;s make intake feel like a conversation—not a chore
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif tracking-tighter text-on-surface mb-4 sm:mb-6" data-lp-reveal style={{ ['--lp-del' as string]: '0ms' }}>
+            Let&apos;s make intake feel like a conversation, not a chore
           </h2>
 
-          <p className="text-xl text-on-surface-variant mb-8 leading-relaxed tracking-wide font-light" data-lp-reveal style={{ ['--lp-del' as string]: '100ms' }}>
+          <p className="text-base sm:text-lg text-on-surface-variant mb-6 sm:mb-8 leading-relaxed tracking-wide font-light" data-lp-reveal style={{ ['--lp-del' as string]: '100ms' }}>
             In one short session, we&apos;ll show you:
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-10 sm:mb-12">
             {[
               'How inquiries become a partner-ready brief',
               'How PI and immigration signals are separated from noise',
@@ -576,7 +580,7 @@ export default function Home() {
                 key={idx}
                 data-lp-reveal
                 style={{ ['--lp-del' as string]: `${idx * 100}ms` }}
-                className="bg-surface-container-low/40 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-6 hover:bg-surface-container-low/60 transition-colors duration-300 premium-card"
+                className="bg-surface-container-low/40 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-5 sm:p-6 hover:bg-surface-container-low/60 transition-colors duration-300 premium-card"
               >
                 <p className="text-base text-on-surface leading-relaxed">{item}</p>
               </div>
@@ -584,17 +588,17 @@ export default function Home() {
           </div>
 
           <div
-            className="bg-surface-container-high/30 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-12 mb-8"
+            className="bg-surface-container-high/30 border border-outline-variant/30 backdrop-blur-xl rounded-lg p-6 sm:p-10 md:p-12 mb-8"
             data-lp-reveal
             style={{ ['--lp-del' as string]: '0ms' }}
           >
-            <div className="bg-surface-container-high/40 rounded border border-outline-variant/40 py-10 text-center">
+            <div className="bg-surface-container-high/40 rounded border border-outline-variant/40 py-8 sm:py-10 text-center">
               <form
                 onSubmit={(e) => {
                   e.preventDefault()
                   setDemoSubmitted(true)
                 }}
-                className="max-w-xl mx-auto px-2"
+                className="max-w-xl mx-auto px-0 sm:px-2"
               >
                 <div className="space-y-4 text-left">
                   <div>
@@ -665,17 +669,17 @@ export default function Home() {
 
       {/* SECTION 5: FOOTER */}
       <footer className="w-full bg-surface-container-lowest border-t border-outline-variant/20">
-        <div className="max-w-7xl mx-auto px-8 py-16">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12 sm:py-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
             <div>
               <h3 className="text-lg font-serif tracking-tighter text-on-surface mb-4">NovaSphere</h3>
               <p className="text-sm text-on-surface-variant leading-relaxed">
-                AI-assisted lead qualification for personal injury and immigration firms—so your best cases surface first.
+                AI-assisted lead qualification for personal injury and immigration firms, so your best cases surface first.
               </p>
             </div>
 
             <div>
-              <h4 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Explore</h4>
+              <h4 className="text-xs font-sans font-semibold uppercase tracking-widest lp-accent-label mb-6">Explore</h4>
               <ul className="space-y-3">
                 <li>
                   <a href="#product" className="text-sm text-on-surface-variant hover:text-on-surface transition-colors">
@@ -701,7 +705,7 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="text-xs font-sans font-semibold uppercase tracking-widest text-[#c8a0d6] mb-6">Resources</h4>
+              <h4 className="text-xs font-sans font-semibold uppercase tracking-widest lp-accent-label mb-6">Resources</h4>
               <ul className="space-y-3">
                 {['FAQ', 'Documentation', 'LinkedIn'].map((link) => (
                   <li key={link}>
